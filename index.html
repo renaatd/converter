@@ -29,21 +29,31 @@
       <div v-else>
         <div v-if="!textValid"><strong>This is not valid UTF-8, no text/URI available.</strong></div>
         <div class="flex-row">
-          <div class="flex-small one-fourth">Input type</div>
-          <div class="flex-small">{{ inputType }}</div>
-        </div>
-        <div class="flex-row">
           <div class="flex-small one-fourth">Input length</div>
           <div class="flex-small">{{ rawBytes.length }} bytes</div>
         </div>
-        <div v-if="textValid" class="flex-row">
-          <div class="flex-small one-fourth">Text</div>
-          <div class="flex-small">{{ rawText }}</div>
+
+        <div v-if="textValid">
+          <div class="flex-row">
+            <div class="flex-small one-fourth">Input length</div>
+            <div class="flex-small">{{ codePoints.length }} Unicode code points</div>
+          </div>
+          <br/>
+          <div class="flex-row">
+            <div class="flex-small one-fourth">Text</div>
+            <div class="flex-small">{{ rawText }}</div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-small one-fourth">URI encoded text</div>
+            <div class="flex-small">{{ uriEncoded }}</div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-small one-fourth">Unicode code points</div>
+            <div class="flex-small">{{ unicode }}</div>
+          </div>
         </div>
-        <div v-if="textValid" class="flex-row">
-          <div class="flex-small one-fourth">URI encoded text</div>
-          <div class="flex-small">{{ uriEncoded }}</div>
-        </div>
+
+        <br/>
         <div class="flex-row">
           <div class="flex-small one-fourth">Hex encoded bytes</div>
           <div class="flex-small">{{ hexBytes }}</div>
@@ -55,6 +65,7 @@
       </div>
     </div>
 
+    <br/>
     <a href="https://github.com/renaatd/converter">source code</a>
   </div>
   <script src="converter.js"></script>

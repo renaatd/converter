@@ -35,6 +35,23 @@ function bytesToText(byteArray) {
     return decodeURIComponent(uri);
 }
 
+/** Convert a string to a list of Unicode code points */
+function textToCodePoints(text) {
+    // Javascript strings are stored in UTF-16, so one Unicode codepoint takes 1 or 2 characters in a string
+    let codePoints = []
+    for (let i = 0; i < text.length; i++) {
+        let thisCode = text.codePointAt(i);
+        codePoints.push(thisCode);
+        // string.codePointAt() recognizes correctly surrogate pairs, but the index
+        // is in string characters, so we must do an extra increment if this is one
+        // takes 2 characters
+        if (thisCode >= 65536) {
+            i++;
+        }
+    }
+    return codePoints;
+}
+
 // Functions for conversion from TypedArray to Base64: https://developer.mozilla.org/en-US/docs/Glossary/Base64
 
 /** Decode one character of a Base64 string to its 6-bit value */
@@ -121,8 +138,11 @@ data() {
     return {
         inputType: 'text',
         inputString: '€',
+
         rawBytes : new Uint8Array(),
         rawText : '',
+        codePoints: [],
+
         bytesValid: true,
         textValid: true,
         errorMessage: '',
@@ -142,6 +162,13 @@ computed: {
     },
     uriEncoded() {
         return encodeURIComponent(this.rawText);
+    },
+    unicode() {
+        let result = '';
+        for (let i=0; i < this.codePoints.length; i++) {
+            result += 'U+' + ("000000" + this.codePoints[i].toString(16)).slice(-6) + ' ';
+        }
+        return result.slice(0, -1);
     }
 },
 methods: {
@@ -153,6 +180,7 @@ methods: {
     update(inputType, inputString) {
         this.rawBytes = new Uint8Array();
         this.rawText = '';
+        this.codePoints = [];
         this.bytesValid = false;
         this.textValid = false;
         this.errorMessage = "Unknown error";
@@ -181,6 +209,9 @@ methods: {
                 this.rawText = bytesToText(this.rawBytes);
                 this.textValid = true;
             } catch(e) {}
+        }
+        if (this.textValid) {
+            this.codePoints = textToCodePoints(this.rawText);
         }
     }
 },
