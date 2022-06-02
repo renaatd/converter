@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>hex/base64/urlencode converter</title>
+  <link rel="stylesheet" type="text/css" href="main.min.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>UTF-8 / base64 / hex converter</h2>
+    <p>Convert UTF-8 / base64 / URI encoding / hex strings in the browser, while typing. Simple and ad-free. Loose input checking.</p>
+    <div id="app">
+      <form @submit.prevent="">
+        <label for="inputType">Input type:</label>
+        <select id="inputType" v-model="inputType">
+          <option value="text">Text</option>
+          <option value="uri">URI</option>
+          <option value="hex">Hex</option>
+          <option value="base64">Base64</option>
+        </select>
+
+        <label for="utf">Input:</label>
+        <input id="utf" type="text" inputmode="text" v-model="inputString">
+      </form>
+
+      <div v-if="!bytesValid"><strong>Invalid input: {{ errorMessage }}</strong></div>
+      <div v-else>
+        <div v-if="!textValid"><strong>This is not valid UTF-8, no text/URI available.</strong></div>
+        <div class="flex-row">
+          <div class="flex-small one-fourth">Input type</div>
+          <div class="flex-small">{{ inputType }}</div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-small one-fourth">Input length</div>
+          <div class="flex-small">{{ rawBytes.length }} bytes</div>
+        </div>
+        <div v-if="textValid" class="flex-row">
+          <div class="flex-small one-fourth">Text</div>
+          <div class="flex-small">{{ rawText }}</div>
+        </div>
+        <div v-if="textValid" class="flex-row">
+          <div class="flex-small one-fourth">URI encoded text</div>
+          <div class="flex-small">{{ uriEncoded }}</div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-small one-fourth">Hex encoded bytes</div>
+          <div class="flex-small">{{ hexBytes }}</div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-small one-fourth">Base64 encoded bytes</div>
+          <div class="flex-small">{{ base64Bytes }}</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="">source code</a>
+  </div>
+  <script src="converter.js"></script>
+</body>
+</html>
