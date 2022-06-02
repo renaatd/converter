@@ -120,7 +120,7 @@ createApp({
 data() {
     return {
         inputType: 'text',
-        inputString: '\uD800\uDFFF',
+        inputString: '€',
         rawBytes : new Uint8Array(),
         rawText : '',
         bytesValid: true,
